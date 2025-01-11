@@ -40,4 +40,52 @@ export const ledgerData = [
     userId: 1,
     categoryId: 2,
   },
+  {
+    transaction_amount: 3500,
+    transaction_date: new Date('2024-12-01'),
+    userId: 1,
+    categoryId: 1,
+  },
+  {
+    transaction_amount: 1200,
+    transaction_date: new Date('2024-12-02'),
+    userId: 1,
+    categoryId: 2,
+  },
+  {
+    transaction_amount: 1000,
+    transaction_date: new Date('2024-12-10'),
+    userId: 1,
+    categoryId: 1,
+  },
+  {
+    transaction_amount: 80,
+    transaction_date: new Date('2024-12-15'),
+    userId: 1,
+    categoryId: 2,
+  },
+  {
+    transaction_amount: 500,
+    transaction_date: new Date('2024-12-20'),
+    userId: 1,
+    categoryId: 1,
+  },
+  {
+    transaction_amount: 300,
+    transaction_date: new Date('2024-12-22'),
+    userId: 1,
+    categoryId: 2,
+  },
+  {
+    transaction_amount: 250,
+    transaction_date: new Date('2024-12-25'),
+    userId: 1,
+    categoryId: 1,
+  },
+  {
+    transaction_amount: 200,
+    transaction_date: new Date('2024-12-30'),
+    userId: 1,
+    categoryId: 2,
+  },
 ];

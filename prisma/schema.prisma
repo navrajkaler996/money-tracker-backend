@@ -30,7 +30,7 @@ model Expense {
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
   userId         Int?
-  user           User?     @relation(fields: [userId], references: [id])
+  user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -38,7 +38,7 @@ model Category {
   category_name   String
   category_amount Int
   userId          Int
-  user            User?    @relation(fields: [userId], references: [id])
+  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   Ledger          Ledger[]
 }
 
@@ -48,6 +48,6 @@ model Ledger {
   transaction_amount Int
   userId             Int
   categoryId         Int
-  user               User?     @relation(fields: [userId], references: [id])
-  category           Category? @relation(fields: [categoryId], references: [id])
+  user               User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category           Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
