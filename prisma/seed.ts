@@ -22,7 +22,7 @@ async function main() {
   // });
   const ledgers = await prisma.ledger.createMany({
     data: ledgerData,
-    skipDuplicates: true,
+    // skipDuplicates: true,
   });
   // //console.log({ users });
   // console.log({ expenses });

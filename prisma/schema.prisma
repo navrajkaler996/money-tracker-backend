@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-    id       Int        @id @default(autoincrement())
-    email    String     @unique
-    password String
-    Category Category[]
-    Expense  Expense[]
-    Ledger   Ledger[]
+    id         Int        @id @default(autoincrement())
+    email      String     @unique
+    password   String
+    first_name String
+    Category   Category[]
+    Expense    Expense[]
+    Ledger     Ledger[]
 }
 
 model Expense {
