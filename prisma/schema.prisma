@@ -1,53 +1,47 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  email    String     @unique
-  password String
-  Expense  Expense[]
-  Category Category[]
-  Ledger   Ledger[]
+    id       Int        @id @default(autoincrement())
+    email    String     @unique
+    password String
+    Category Category[]
+    Expense  Expense[]
+    Ledger   Ledger[]
 }
 
 model Expense {
-  id             Int       @id @default(autoincrement())
-  total_expenses Int
-  date_started   DateTime
-  date_ended     DateTime?
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
-  userId         Int?
-  user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id             Int       @id @default(autoincrement())
+    total_expenses Int
+    date_started   DateTime
+    date_ended     DateTime?
+    created_at     DateTime  @default(now())
+    updated_at     DateTime  @updatedAt
+    userId         Int?
+    user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id              Int      @id @default(autoincrement())
-  category_name   String
-  category_amount Int
-  userId          Int
-  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Ledger          Ledger[]
+    id              Int      @id @default(autoincrement())
+    category_name   String
+    userId          Int
+    category_amount Int
+    user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Ledger          Ledger[]
 }
 
 model Ledger {
-  transaction_id     Int       @id @default(autoincrement())
-  transaction_date   DateTime
-  transaction_amount Int
-  userId             Int
-  categoryId         Int
-  user               User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category           Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    transaction_id     Int      @id @default(autoincrement())
+    userId             Int
+    categoryId         Int
+    transaction_amount Int
+    transaction_date   DateTime
+    category           Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
