@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async register(user: any) {
     try {
@@ -17,9 +21,12 @@ export class UsersService {
         throw new Error(`User already exists with email ${user.email}`);
       }
 
-      const newUser = this.prisma.user.create({ data: user });
+      const newUser = await this.prisma.user.create({ data: user });
 
-      return newUser;
+      const payload = { sub: newUser.id, email: newUser.email };
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
     } catch (error) {
       throw new Error(`Error creating new user: ${error.message}`);
     }

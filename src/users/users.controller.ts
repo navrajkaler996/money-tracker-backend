@@ -17,7 +17,6 @@ export class UsersController {
   //User registration
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
-    console.log('---', createUserDto);
     return this.usersService.register(createUserDto);
   }
 
