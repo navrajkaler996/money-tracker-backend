@@ -26,6 +26,7 @@ export class UsersService {
       const payload = { sub: newUser.id, email: newUser.email };
       return {
         access_token: await this.jwtService.signAsync(payload),
+        user: newUser,
       };
     } catch (error) {
       throw new Error(`Error creating new user: ${error.message}`);

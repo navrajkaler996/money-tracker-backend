@@ -29,12 +29,11 @@ model Expense {
 }
 
 model Category {
-    id              Int      @id @default(autoincrement())
-    category_name   String
-    userId          Int
-    category_amount Int
-    user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    Ledger          Ledger[]
+    id            Int      @id @default(autoincrement())
+    category_name String
+    userId        Int
+    user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Ledger        Ledger[]
 }
 
 model Ledger {
