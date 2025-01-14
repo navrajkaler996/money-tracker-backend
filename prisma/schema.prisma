@@ -15,6 +15,7 @@ model User {
     Category   Category[]
     Expense    Expense[]
     Ledger     Ledger[]
+    Account    Account[]
 }
 
 model Expense {
@@ -44,4 +45,23 @@ model Ledger {
     transaction_date   DateTime
     category           Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+    account_id       Int         @id @default(autoincrement())
+    userId           Int
+    account_type     AccountType
+    bank_name        String?
+    total_amount     Int?        @default(0)
+    credit_limit     Int?
+    available_credit Int?
+    user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+//Types
+
+enum AccountType {
+    credit
+    debit
+    cash
 }
