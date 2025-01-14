@@ -17,7 +17,7 @@ export class CategoriesController {
   }
 
   //Insert categories using userid
-  @Post(':userId')
+  @Post('insert/:userId')
   async insertCategories(
     @Param('userId') userId: string,
     @Body() createCategoryDto: CreateCategoryDto,
