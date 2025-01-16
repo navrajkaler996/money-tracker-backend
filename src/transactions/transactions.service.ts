@@ -36,4 +36,36 @@ export class TransactionsService {
       throw new Error(`Error fetching expense: ${error.message}`);
     }
   }
+
+  //Create transaction for a using
+  /////using userId
+  async createTransaction(userId: number, transaction: any) {
+    try {
+      const userExists = await this.prisma.user.findUnique({
+        where: {
+          id: Number(userId),
+        },
+      });
+
+      if (!userExists.id) {
+        throw new Error(`No user exists with id ${userId}`);
+      }
+
+      const transactionToCreate = {
+        ...transaction,
+        userId,
+        transaction_date: new Date().toISOString(),
+      };
+
+      const createdTransaction = await this.prisma.ledger.create({
+        data: transactionToCreate,
+      });
+
+      return createdTransaction;
+    } catch (error) {
+      throw new Error(
+        `An error occurred while creating transaction: ${error.message}`,
+      );
+    }
+  }
 }

@@ -20,10 +20,10 @@ async function main() {
   // const categories = await prisma.category.createMany({
   //   data: categoryData,
   // });
-  const ledgers = await prisma.ledger.createMany({
-    data: ledgerData,
-    // skipDuplicates: true,
-  });
+  // const ledgers = await prisma.ledger.createMany({
+  //   data: ledgerData,
+  //   // skipDuplicates: true,
+  // });
   // //console.log({ users });
   // console.log({ expenses });
   // console.log({ categories });

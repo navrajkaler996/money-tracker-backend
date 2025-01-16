@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
+import { CreateTransactionDto } from './dto/create-transaction-dto';
 
 @Controller('/api/v1/transactions')
 export class TransactionsController {
@@ -28,6 +29,21 @@ export class TransactionsController {
       );
     } catch (error) {
       throw new Error(`Error fetching transactions: ${error.message}`);
+    }
+  }
+
+  @Post('create/:userId')
+  async createTransaction(
+    @Param('userId') userId: string,
+    @Body() transactionData: CreateTransactionDto,
+  ) {
+    try {
+      return await this.transactionsService.createTransaction(
+        +userId,
+        transactionData,
+      );
+    } catch (error) {
+      throw new Error(`Error creating transaction: ${error.message}`);
     }
   }
 }

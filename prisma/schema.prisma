@@ -40,11 +40,14 @@ model Category {
 model Ledger {
     transaction_id     Int      @id @default(autoincrement())
     userId             Int
-    categoryId         Int
+    category_id        Int
     transaction_amount Int
     transaction_date   DateTime
-    category           Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    account_id         Int
+    description        String?
+    category           Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
     user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    account            Account  @relation(fields: [account_id], references: [account_id], onDelete: Cascade)
 }
 
 model Account {
@@ -56,6 +59,7 @@ model Account {
     credit_limit     Int?
     available_credit Int?
     user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Ledger           Ledger[]
 }
 
 //Types
