@@ -54,4 +54,27 @@ export class CategoriesService {
       );
     }
   }
+
+  //Find categories by userId
+  async findCategoriesByUserId(userId: any) {
+    try {
+      const userExists = await this.prisma.user.findUnique({
+        where: {
+          id: Number(userId),
+        },
+      });
+
+      if (!userExists.id) {
+        throw new Error(`No user exists with id ${userId}`);
+      }
+
+      const categories = await this.prisma.category.findMany({
+        where: {
+          userId: Number(userId),
+        },
+      });
+
+      return categories;
+    } catch (error) {}
+  }
 }

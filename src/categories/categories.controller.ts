@@ -16,6 +16,16 @@ export class CategoriesController {
     }
   }
 
+  //Find categories by userId
+  @Get('fetch/:userId')
+  async findCategoriesByUserId(@Param('userId') userId: string) {
+    try {
+      return await this.categoriesService.findCategoriesByUserId(userId);
+    } catch (error) {
+      throw new Error(`Error fetching categories: ${error.message}`);
+    }
+  }
+
   //Insert categories using userid
   @Post('insert/:userId')
   async insertCategories(
