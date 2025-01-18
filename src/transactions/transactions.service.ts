@@ -29,6 +29,9 @@ export class TransactionsService {
             },
           ],
         },
+        orderBy: {
+          transaction_date: 'desc',
+        },
       });
 
       if (!transactions) {
