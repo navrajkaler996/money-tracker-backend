@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-accounts-dto';
+import { UpdateAccountDto } from './dto/update-account-dto';
 
 @Controller('/api/v1/accounts')
 export class AccountsController {
@@ -23,6 +24,18 @@ export class AccountsController {
       return this.accountsService.insertAccounts(userId, accounts);
     } catch (error) {
       throw new Error(`Error fetching transactions: ${error.message}`);
+    }
+  }
+
+  @Patch('update/:account_id')
+  async updateAccount(
+    @Param('account_id') account_id: number,
+    @Body() transaction: UpdateAccountDto,
+  ) {
+    try {
+      return this.accountsService.updateAccount(account_id, transaction);
+    } catch (error) {
+      throw new Error(`Error while updating account: ${error.message}`);
     }
   }
 }

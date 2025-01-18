@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { access } from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 
@@ -74,6 +75,60 @@ export class AccountsService {
     } catch (error) {
       throw new Error(
         `An error occurred while adding accounts: ${error.message}`,
+      );
+    }
+  }
+
+  //Updating account using account id
+  async updateAccount(accountId: number, transaction: any) {
+    try {
+      const accountExists = await this.prisma.account.findUnique({
+        where: { account_id: Number(accountId) },
+      });
+
+      if (!accountExists) {
+        throw new Error(`No account exists with id ${accountId}`);
+      }
+
+      const accountType = accountExists?.account_type?.toLowerCase();
+
+      if (accountType === 'cash' || accountType === 'debit') {
+        const newTotalAmount =
+          Number(accountExists.total_amount) -
+          Number(transaction.transactionAmount);
+
+        const updatedAccount = await this.prisma.account.update({
+          where: {
+            account_id: Number(accountId),
+          },
+          data: {
+            total_amount: newTotalAmount,
+          },
+        });
+
+        return { updatedAccount };
+      }
+
+      if (accountType === 'credit') {
+        const creditLimit = accountExists.credit_limit;
+        const availableCredit = accountExists.available_credit;
+
+        const newAvailableCredit =
+          Number(accountExists.available_credit) -
+          Number(transaction.transactionAmount);
+        const updatedAccount = await this.prisma.account.update({
+          where: {
+            account_id: Number(accountId),
+          },
+          data: {
+            available_credit: newAvailableCredit,
+          },
+        });
+        return { updatedAccount };
+      }
+    } catch (error) {
+      throw new Error(
+        `An error occurred while updating account: ${error.message}`,
       );
     }
   }
