@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { AccountsService } from 'src/accounts/accounts.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private account: AccountsService,
+  ) {}
 
   //Find all by transaction for a user
   /////using userId
@@ -60,6 +64,13 @@ export class TransactionsService {
       const createdTransaction = await this.prisma.ledger.create({
         data: transactionToCreate,
       });
+
+      const accountId = createdTransaction.account_id;
+      const payload = {
+        transactionAmount: createdTransaction.transaction_amount,
+      };
+
+      const updatedAccount = this.account.updateAccount(accountId, payload);
 
       return createdTransaction;
     } catch (error) {
