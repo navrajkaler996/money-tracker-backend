@@ -82,4 +82,28 @@ export class TransactionsService {
       );
     }
   }
+
+  //Find all by transaction for a user
+  /////using category id
+  findByCategoryId(userId: number, categoryId: number) {
+    try {
+      const transactions = this.prisma.ledger.findMany({
+        where: {
+          userId: Number(userId),
+          category_id: categoryId,
+        },
+        orderBy: {
+          transaction_date: 'desc',
+        },
+      });
+
+      if (!transactions) {
+        throw new Error(`Transactions not found for categoryId ${categoryId}`);
+      }
+
+      return transactions;
+    } catch (error) {
+      throw new Error(`Error fetching expense: ${error.message}`);
+    }
+  }
 }

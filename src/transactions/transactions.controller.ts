@@ -32,6 +32,22 @@ export class TransactionsController {
     }
   }
 
+  //Find transactions using userid and categoryid
+  @Get('fetch/:userId/:categoryId')
+  async findByCategoryId(
+    @Param('userId') userId: string,
+    @Param('categoryId') categoryId: string,
+  ) {
+    try {
+      return await this.transactionsService.findByCategoryId(
+        +userId,
+        +categoryId,
+      );
+    } catch (error) {
+      throw new Error(`Error fetching transactions: ${error.message}`);
+    }
+  }
+
   @Post('create/:userId')
   async createTransaction(
     @Param('userId') userId: string,
