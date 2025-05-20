@@ -2,6 +2,7 @@ export const userData = [
   {
     email: 'navraj@gmail.com',
     password: 'admin',
+    first_name: 'navraj',
   },
 ];
 

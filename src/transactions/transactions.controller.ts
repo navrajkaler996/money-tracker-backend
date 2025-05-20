@@ -20,12 +20,15 @@ export class TransactionsController {
     @Param('userId') userId: string,
     @Query('month') month: string,
     @Query('year') year: string,
+    @Query('date') date: string, //use when transactions of a particular date is needed
   ) {
+    console.log('aa', userId);
     try {
       return await this.transactionsService.findByUserId(
         +userId,
         month ? +month : undefined,
         year ? +year : undefined,
+        date ? date : undefined,
       );
     } catch (error) {
       throw new Error(`Error fetching transactions: ${error.message}`);
@@ -60,6 +63,21 @@ export class TransactionsController {
       );
     } catch (error) {
       throw new Error(`Error creating transaction: ${error.message}`);
+    }
+  }
+
+  @Get('fetch/byaccountid/:userId/:accountId')
+  async findByAccountId(
+    @Param('userId') userId: string,
+    @Param('accountId') accountId: string,
+  ) {
+    try {
+      return await this.transactionsService.findByAccountId(
+        +userId,
+        +accountId,
+      );
+    } catch (error) {
+      throw new Error(`Error fetching transaction: ${error.message}`);
     }
   }
 }

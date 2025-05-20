@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { startWith } from 'rxjs';
 import { AccountsService } from 'src/accounts/accounts.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { startOfDay, endOfDay } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
@@ -11,28 +13,51 @@ export class TransactionsService {
 
   //Find all by transaction for a user
   /////using userId
-  findByUserId(userId: number, month: number, year: number) {
+  findByUserId(userId: number, month: number, year: number, date: any) {
+    let transactions: any;
+
     try {
-      const transactions = this.prisma.ledger.findMany({
-        where: {
-          userId: Number(userId),
-          AND: [
-            {
-              transaction_date: {
-                gte: new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)),
-              },
+      if (date) {
+        transactions = this.prisma.ledger.findMany({
+          where: {
+            userId: Number(userId),
+            transaction_date: {
+              gte: new Date(`${date}T00:00:00.000Z`), // Start of day in UTC
+              lte: new Date(`${date}T23:59:59.999Z`), // End of day in UTC
             },
-            {
-              transaction_date: {
-                lt: new Date(Date.UTC(year, month, 0, 23, 59, 59)),
+          },
+        });
+      } else if (month && year) {
+        transactions = this.prisma.ledger.findMany({
+          where: {
+            userId: Number(userId),
+            AND: [
+              {
+                transaction_date: {
+                  gte: new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)),
+                },
               },
-            },
-          ],
-        },
-        orderBy: {
-          transaction_date: 'desc',
-        },
-      });
+              {
+                transaction_date: {
+                  lt: new Date(Date.UTC(year, month, 0, 23, 59, 59)),
+                },
+              },
+            ],
+          },
+          orderBy: {
+            transaction_date: 'desc',
+          },
+        });
+      } else {
+        transactions = this.prisma.ledger.findMany({
+          where: {
+            userId: Number(userId),
+          },
+          orderBy: {
+            transaction_date: 'desc',
+          },
+        });
+      }
 
       if (!transactions) {
         throw new Error(`Transactions not found for userId ${userId}`);
@@ -104,6 +129,31 @@ export class TransactionsService {
       return transactions;
     } catch (error) {
       throw new Error(`Error fetching expense: ${error.message}`);
+    }
+  }
+
+  // Find all transactions for a user by account ID
+  findByAccountId(userId: number, accountId: number) {
+    try {
+      const transactions = this.prisma.ledger.findMany({
+        where: {
+          userId: Number(userId),
+          account_id: accountId,
+        },
+        orderBy: {
+          transaction_date: 'desc',
+        },
+      });
+
+      if (!transactions) {
+        throw new Error(`Transactions not found for accountId ${accountId}`);
+      }
+
+      return transactions;
+    } catch (error) {
+      throw new Error(
+        `Error fetching transactions by account: ${error.message}`,
+      );
     }
   }
 }

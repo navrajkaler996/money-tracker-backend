@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 async function main() {
   // const deleteUsers = await prisma.user.deleteMany();
-  // const users = await prisma.user.createMany({
-  //   data: userData,
-  // });
+  const users = await prisma.user.createMany({
+    data: userData,
+  });
   // console.log(users);
   // const deleteLedger = await prisma.ledger.deleteMany({});
   // const deleteExpenses = await prisma.expense.deleteMany({});
