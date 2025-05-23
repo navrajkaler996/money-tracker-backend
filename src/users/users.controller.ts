@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('/api/v1/users')
 export class UsersController {
@@ -18,6 +19,19 @@ export class UsersController {
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.register(createUserDto);
+  }
+
+  //User login
+  @Post('login')
+  async login(@Body() loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+
+    // Replace with real auth logic
+    if (email && password) {
+      return this.usersService.login(email, password);
+    }
+
+    throw new Error('Invalid credentials');
   }
 
   // @Get()
